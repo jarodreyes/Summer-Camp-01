@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html class='no-js' lang='en'>
+  <head>
+    <meta charset='utf-8'>
+    <title>A simble Mobile App Distribution widget</title>
+    <meta content='' name='description'>
+    <meta content='width=device-width, initial-scale=1' name='viewport'>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <style type="text/css">
+        .sms-form {
+          background: url(img/bg-app.png) no-repeat center center;
+          width: 320px;
+          height: 545px;
+          margin: 20px 40px;
+          position: relative;
+        }
+        label, input, .submit-btn {
+          position: absolute;
+          display: block;
+          width: 100%;
+          text-align: center;
+          font-family: helvetica;
+          font-size: 18px;
+        }
+        label {
+          top: 410px;
+        }
+        input {
+          top: 432px;
+          width: 85% !important;
+          margin: 12px;
+          padding: 9px;
+        }
+        .submit-btn {
+          width: 86% !important;
+          margin: 12px;
+          padding: 9px;
+          top: 481px;
+          background: #F07744;
+          text-decoration: none;
+          color: white;
+          text-shadow: 0px -1px 0px rgba(0,0,0,0.3);
+        }
+    </style>
+  </head>
+  <body>
+      <div class='sms-form'>
+        <label>Your Mobile Number</label>
+        <input class='mobile' placeholder='Example: 5558675309'>
+        <a class='submit-btn btn btn-primary' href='#'>Send SMS</a>
+      </div>
+  </body>
+  <script>
+      // SIMPLE PHONE NUMBER VALIDATION
+      function isValidPhoneNumber(value) {
+          if (!value) return false;
+          var count = value.replace(/[^0-9]/g, "").length;
+          return count == 10 || count == 11;
+      }
+      $(document).ready(function() {
+          $('.submit-btn').click(function(e) {
+              e.preventDefault();
+              // GET THE USERS NUMBER FROM THE INPUT
+              var num = $('.mobile').val();
+
+              // WILL RETURN TRUE WITH US PHONE NUMBERS
+              var valid = isValidPhoneNumber(num);
+
+              if (valid) {
+                  // SEND THE PHONE NUMBER TO YOUR SERVER
+                  $.ajax({
+                      url: 'yourserver.com/webhook/sms/',
+                      data: { 'to': num },
+                      type: 'GET',
+                      crossDomain: true,
+                      dataType: 'jsonp',
+                      success: function() {
+                          return $('.submit-btn').html('SMS Sent!');
+                      }
+                  });
+              }
+          });
+      });
+  </script>
+</html>
